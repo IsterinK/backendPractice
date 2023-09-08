@@ -2,9 +2,7 @@
 const bodyParser = require("body-parser")
 const express = require("express")
 const addressRoutes = require("./routes/address")
-
-//Importacion de archivos
-const { API_PATH, PORT } = require('./variables')
+const dotenv = require('dotenv').config();
 
 const app = express()
 
@@ -12,9 +10,10 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+
 app.use(express.static("uploads"));
 app.use('/uploads', express.static('uploads'));
 
-app.use(`/${API_PATH}/addresses`, addressRoutes);
+app.use(`/${process.env.API_PATH}/addresses`, addressRoutes);
 
 module.exports = app
