@@ -13,7 +13,8 @@ const pokemonSchema=mongoose.Schema({
     name: { type: String },
     order: { type: Number },
     species:{ type: Object },
-    weight: {type: Number}
+    weight: {type: Number},
+    image:{type: String}
 })
 
 module.exports = mongoose.model("Pokemon", pokemonSchema)
