@@ -17,7 +17,7 @@ const getAllMovies = async(req, res) => {
                     poster_path: pelicula.poster_path,
                 }));
                 allMovies.push(...peliculas);
-                if (data.page < 20 /* total_pages */) {
+                if (data.page < total_pages) {
                     params.page += 1;
                 } else {
                     break;
@@ -39,7 +39,6 @@ const getMovieByName = async(req, res) => {
     const movieName = req.params.movieName
     try {
         const response = await axios.get(`${baseUrl}?api_key=${apiKey}&query=${encodeURIComponent(movieName)}`);
-        console.log(`${baseUrl}?api_key=${apiKey}&query=${encodeURIComponent(movieName)}`)
         
         if (response.status === 200) {
             const data = response.data
