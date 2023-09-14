@@ -6,7 +6,7 @@ const movieSchema=mongoose.Schema({
     id: {type: Number},
     original_language: {type: String},
     original_title: {type: String},
-    overview: {type: Text},
+    overview: {type: String},
     production_companies: {type: Array},
     production_countries: {type: Array},
     release_date: {type: Date},
