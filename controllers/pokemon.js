@@ -19,7 +19,7 @@ const getAll = async (req, res) => {
         }
         res.json(pokemonData);
       } catch (error) {
-        res.status(404).json({ message: 'Pokémon no encontrado' });
+        res.status(404).json({ message: 'Pokémon no encontrado' + error});
       }
 };
 
