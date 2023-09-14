@@ -17,7 +17,7 @@ const getAllMovies = async(req, res) => {
                     poster_path: pelicula.poster_path,
                 }));
                 allMovies.push(...peliculas);
-                if (data.page < total_pages) {
+                if (data.page < data.total_pages) {
                     params.page += 1;
                 } else {
                     break;
