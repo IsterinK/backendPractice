@@ -1,7 +1,6 @@
 const express = require('express')
-const router = express.Router()
-const { default: mongoose } = require('mongoose')
 const axios = require('axios')
+import fetch from 'node-fetch';
 
 const getAddresses = async (req, res)=>{
     try {
