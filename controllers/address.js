@@ -1,6 +1,6 @@
 const express = require('express')
 const axios = require('axios')
-import fetch from 'node-fetch';
+const fetch = require('node-fetch')
 
 const getAddresses = async (req, res)=>{
     try {
