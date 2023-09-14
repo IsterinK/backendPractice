@@ -48,7 +48,7 @@ const getMun = async (req, res) => {
     const department = req.params.department;
     try {
         const response = await fetch(`https://www.datos.gov.co/resource/xdk5-pm3f.json?departamento=${department}`);
-        if(response.length() === 0){
+        if(!response){
             res.status(500).json({ error: 'El departamento ingresado es invalido o no existe' });
         }else{
             const data = await response.json();
