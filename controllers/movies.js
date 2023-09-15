@@ -14,7 +14,7 @@ const getAllMovies = async(req, res) => {
                 const data = response.data;
                 const peliculas = data.results.map((pelicula) => ({
                     original_title: pelicula.original_title,
-                    poster_path: pelicula.poster_path,
+                    poster_path: 'http://image.tmdb.org/t/p/w500' + pelicula.poster_path,
                 }));
                 allMovies.push(...peliculas);
                 if (data.page < 50 /* data.total_pages */) {
