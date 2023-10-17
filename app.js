@@ -4,7 +4,9 @@ const express = require("express")
 const addressRoutes = require("./routes/address")
 const pokemonRoutes = require("./routes/pokemon")
 const moviesRoutes = require("./routes/movies")
+const postRoutes = require("./routes/post")
 const dotenv = require('dotenv').config();
+const cors = require('cors')
 
 const app = express()
 
@@ -12,12 +14,14 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-
 app.use(express.static("uploads"));
 app.use('/uploads', express.static('uploads'));
+
+app.use(cors());
 
 app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/addresses`, addressRoutes);
 app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/pokemons`, pokemonRoutes);
 app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/movies`, moviesRoutes);
+app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/posts`, postRoutes);
 
 module.exports = app
