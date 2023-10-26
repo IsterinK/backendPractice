@@ -27,28 +27,26 @@ const login = async (req, res) => {
 // Register User
 
 const register = async (req, res) => {
-    const { names, lastname, email, password, documentType, identification} = req.body;
+  const { name, lastname, email, password, documentType, identification} = req.body;
 
-    if(names  && lastname  && email  && password  && phone  &&
-        genre  && birthday  && schooling  && documentType  && 
-        identification !== null){
+  if(name  && lastname  && email  && password && documentType  && 
+      identification !== null){
 
-            const crypt = await bcrypt.genSalt(10)
-            const crypt_password = await bcrypt.hash(password, crypt)
+          const crypt = await bcrypt.genSalt(10)
+          const crypt_password = await bcrypt.hash(password, crypt)
 
-            const new_user = await User({
-                names, lastnames, email: email.toLowerCase(), password: crypt_password, phone, genre
-                , birthDay: new Date(birthday), schooling, documentType, identification
-            })
-            try {
-                const userDB = await new_user.save()
-                res.status(201).json(userDB)
-            } catch (error) {
-                res.status(400).json("La identificación ya fue registrada")
-            } 
-    } else {
-        res.status(400).json("Faltan Campos requeridos")
-    }
+          const new_user = await User({
+              name, lastname, email: email.toLowerCase(), password: crypt_password, documentType, identification
+          })
+          try {
+              const userDB = await new_user.save()
+              res.status(201).json(userDB)
+          } catch (error) {
+              res.status(400).json("La identificación ya fue registrada")
+          } 
+  } else {
+      res.status(400).json("Faltan Campos requeridos")
+  }
 }
 
 const getAllUsers = async(req, res) => {
