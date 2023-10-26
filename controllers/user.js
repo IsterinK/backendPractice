@@ -5,9 +5,9 @@ const jwt = require("../utils/jwt")
 // LogIn
 
 const login = async (req, res) => {
-  const { identification, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const userStore = await User.findOne({ identification: identification });
+    const userStore = await User.findOne({ email: email });
     if (!userStore) {
       throw new Error("El usuario no existe");
     }
@@ -27,12 +27,9 @@ const login = async (req, res) => {
 // Register User
 
 const register = async (req, res) => {
-    const { names, lastnames, email, password, phone, genre, birthday, schooling, documentType
-    , identification} = req.body;
-    
-    
+    const { names, lastname, email, password, documentType, identification} = req.body;
 
-    if(names  && lastnames  && email  && password  && phone  &&
+    if(names  && lastname  && email  && password  && phone  &&
         genre  && birthday  && schooling  && documentType  && 
         identification !== null){
 
@@ -48,12 +45,10 @@ const register = async (req, res) => {
                 res.status(201).json(userDB)
             } catch (error) {
                 res.status(400).json("La identificación ya fue registrada")
-            }
-            
+            } 
     } else {
         res.status(400).json("Faltan Campos requeridos")
     }
-
 }
 
 const getAllUsers = async(req, res) => {
