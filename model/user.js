@@ -6,8 +6,7 @@ const userSchema = mongoose.Schema({
     active: { type: Boolean, require: true, default: true },
     avatar: { type: String, require: true },
     email: { type: String, require: true, unique: true},
-    current_password: { type: String, require: true },
-    address: { type: mongoose.Schema.Types.ObjectId, ref:"Address"}
+    current_password: { type: String, require: true }
 })
 
 module.exports = mongoose.model("User", userSchema);

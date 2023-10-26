@@ -12,7 +12,6 @@ const createAccessToken = (user) => {
     exp: expToken.getTime(),
   };
 
-  console.log("accessToken del jwt: ", payload.user_id);
   return jwt.sign(payload, process.env.JWT_SECRET_KEY);
 };
 
