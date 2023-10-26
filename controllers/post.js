@@ -4,53 +4,26 @@ const IMAGE_UPLOAD_DIR = "./uploads/posts"
 const multiparty = require('multiparty');
 
 const createPost = async (req, res) => {
-    const form = new multiparty.Form({ uploadDir: IMAGE_UPLOAD_DIR });
-
-    form.parse(req, async (err, fields, files) => {
-        if (err) {
-            return res.send({ error: err.message });
-        }
-
-        try {
-            const post = new Post();
-
-            if (fields.title && fields.title[0]) {
-                post.title = fields.title[0];
-            }
-            if (fields.subtitle && fields.subtitle[0]) {
-                post.subtitle = fields.subtitle[0];
-            }
-            if (fields.description && fields.description[0]) {
-                post.description = fields.description[0];
-            }
-
-            if(files){
-                const imagePaths = [];
-                for (const key in files) {
-                    if (files.hasOwnProperty(key)) {
-                      const fileArray = files[key]; // files[key] es un array de objetos
-                      for (const file of fileArray) {
-                        const imagePath = file.path;
-                        const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
-                        const imagePathInServer = `uploads/posts/${imageFileName}`;
-                        imagePaths.push(imagePathInServer);
-                      }
-                    }
-                }
-                post.avatar = imagePaths;
-            }
-            
-            const postDB = await post.save();
-
-            res.status(201).json({ message: "Post creado con éxito", postDB });
-        } catch (error) {
-            console.log(error);
-            res.status(400).json({ message: error.message });
-        }
-    });
+    try {
+      const { title, subtitle, description } = req.body;
+      const avatarPaths = req.files.map(file => file.path);
+  
+      const post = new Post({
+        title,
+        subtitle,
+        description,
+        avatar: avatarPaths,
+      });
+  
+      const postDB = await post.save();
+  
+      res.status(201).json({ message: "Post creado con éxito", post: postDB });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ message: error.message });
+    }
 };
-
-
+  
 
 const getAllPosts = async (req, res) => {
     try {
