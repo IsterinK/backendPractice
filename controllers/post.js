@@ -24,21 +24,32 @@ const createPost = async (req, res) => {
                 post.description = fields.description[0];
             }
 
-            if (files.avatar && files.avatar[0]) {
-                const imagePath = files.avatar[0].path;
-                const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\")+1)
-                post.avatar = `uploads/posts/${imageFileName}`;
+            if(files){
+                const imagePaths = [];
+                for (const key in files) {
+                    if (files.hasOwnProperty(key)) {
+                      const fileArray = files[key]; // files[key] es un array de objetos
+                      for (const file of fileArray) {
+                        const imagePath = file.path;
+                        const imageFileName = imagePath.slice(imagePath.lastIndexOf("\\") + 1);
+                        const imagePathInServer = `uploads/posts/${imageFileName}`;
+                        imagePaths.push(imagePathInServer);
+                      }
+                    }
+                }
+                post.avatar = imagePaths;
             }
+            
+            const postDB = await post.save();
 
-            const postDB = await post.save()
-
-            res.status(201).json({ message: "Post creado con éxito ", postDB });
+            res.status(201).json({ message: "Post creado con éxito", postDB });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             res.status(400).json({ message: error.message });
         }
     });
 };
+
 
 
 const getAllPosts = async (req, res) => {
