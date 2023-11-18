@@ -8,7 +8,8 @@ const userSchema = mongoose.Schema({
     email: { type: String, require: true, unique: true},
     password: { type: String, require: true },
     documentType: { type: String, require: true },
-    identification: { type: String, require: true }
+    identification: { type: String, require: true },
+    rol: { type: String, default: "user"}
 })
 
 module.exports = mongoose.model("User", userSchema);
