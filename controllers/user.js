@@ -1,7 +1,7 @@
 const User = require('../model/user')
 const bcrypt = require("bcrypt")
 const jwt = require("../utils/jwt")
-
+const sendEmail = require("./sendEmail")
 // LogIn
 
 const login = async (req, res) => {
@@ -40,6 +40,7 @@ const register = async (req, res) => {
           })
           try {
               const userDB = await new_user.save()
+              await sendEmail.sendEmailRegister(userDB)
               res.status(201).json(userDB)
           } catch (error) {
               res.status(400).json("La identificación ya fue registrada")
@@ -53,6 +54,7 @@ const getAllUsers = async(req, res) => {
     try {
       const response = await User.find()
       res.status(200).json(response);
+      return response;
     } catch (error) {
       res.status(400).json(error);
     }
