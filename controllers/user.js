@@ -29,7 +29,7 @@ const login = async (req, res) => {
 }
 
 // Register User
-
+ 
 const register = async (req, res) => {
   const { name, lastname, email, password, documentType, identification} = req.body;
   console.log(req.body)
@@ -66,19 +66,60 @@ const getAllUsers = async(req, res) => {
       
 };
 
-const deleteUser =async (req, res) => {
-    try {
-      const { userId } = req.params
-      await User.findByIdAndDelete(userId)
+const getMe = async (req, res) => {
+  try {
+    const { user_id } = req.user;
+    const response = await User.findById(user_id)
+ 
+    if (!response) {
+      return res.status(400).send({ message: "No se ha encontrado el ususario"})
+    }
+
+    res.status(200).send(response)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Error del servidor"})
+  }
+}
+
+const changeActive = async (req, res) => {
+  try {
+    const { user_id } = req.user
+    const { id } = req.params
+    const auxUser = await User.findById(user_id)
+    
+      if(auxUser.rol !== "admin"){
+        res.status(403).send({ message: "Usuario no autorizado"})
+    } 
+    const userToChange = await User.findById(id)
+    await User.findByIdAndUpdate(id, { active: !userToChange.active })
+    res.status(200).json({ message: "Usuario cambiado" })
+  } catch (error) {
+    res.status(400).json(error);
+  }
+}
+
+const deleteUser =async (req, res) => { 
+    try { 
+      const { user_id } = req.user;
+      const auxUser = await User.findById(user_id)
+      if(auxUser.rol !== "admin"){
+        res.status(403).send({ message: "Usuario no autorizado"})
+      } 
+
+      const { id } = req.params
+      await User.findByIdAndDelete(id)
       res.status(200).json({ message: "Usuario eliminado"})
     } catch (error) {
       res.status(400).json(error)
     } 
-  }
+}
 
 module.exports = {
     login,
     register,
     getAllUsers,
-    deleteUser
+    deleteUser,
+    getMe,
+    changeActive
 }
