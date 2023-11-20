@@ -6,6 +6,7 @@ const pokemonRoutes = require("./routes/pokemon")
 const moviesRoutes = require("./routes/movies")
 const userRoutes = require("./routes/user")
 const postRoutes = require("./routes/post")
+const serviceRoutes = require("./routes/service")
 const dotenv = require('dotenv').config();
 const cors = require('cors')
 
@@ -25,5 +26,6 @@ app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/pokemons`, pokemonR
 app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/movies`, moviesRoutes);
 app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/posts`, postRoutes);
 app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/users`, userRoutes);
+app.use(`/${process.env.API_PATH}/${process.env.API_VERSION}/services`, serviceRoutes);
 
 module.exports = app
