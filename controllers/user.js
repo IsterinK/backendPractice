@@ -29,7 +29,7 @@ const login = async (req, res) => {
 }
 
 // Register User
-
+ 
 const register = async (req, res) => {
   const { name, lastname, email, password, documentType, identification} = req.body;
   console.log(req.body)
@@ -66,6 +66,22 @@ const getAllUsers = async(req, res) => {
       
 };
 
+const getMe = async (req, res) => {
+  try {
+    const { user_id } = req.user;
+    const response = await User.findById(user_id)
+ 
+    if (!response) {
+      return res.status(400).send({ message: "No se ha encontrado el ususario"})
+    }
+
+    res.status(200).send(response)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Error del servidor"})
+  }
+}
+
 const deleteUser =async (req, res) => {
     try {
       const { userId } = req.params
@@ -74,11 +90,12 @@ const deleteUser =async (req, res) => {
     } catch (error) {
       res.status(400).json(error)
     } 
-  }
+}
 
 module.exports = {
     login,
     register,
     getAllUsers,
-    deleteUser
+    deleteUser,
+    getMe
 }
