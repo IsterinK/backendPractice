@@ -82,10 +82,33 @@ const getMe = async (req, res) => {
   }
 }
 
-const deleteUser =async (req, res) => {
-    try {
-      const { userId } = req.params
-      await User.findByIdAndDelete(userId)
+const changeActive = async (req, res) => {
+  try {
+    const { user_id } = req.user
+    const { id } = req.params
+    const auxUser = await User.findById(user_id)
+    
+      if(auxUser.rol !== "admin"){
+        res.status(403).send({ message: "Usuario no autorizado"})
+    } 
+    const userToChange = await User.findById(id)
+    await User.findByIdAndUpdate(id, { active: !userToChange.active })
+    res.status(200).json({ message: "Usuario cambiado" })
+  } catch (error) {
+    res.status(400).json(error);
+  }
+}
+
+const deleteUser =async (req, res) => { 
+    try { 
+      const { user_id } = req.user;
+      const auxUser = await User.findById(user_id)
+      if(auxUser.rol !== "admin"){
+        res.status(403).send({ message: "Usuario no autorizado"})
+      } 
+
+      const { id } = req.params
+      await User.findByIdAndDelete(id)
       res.status(200).json({ message: "Usuario eliminado"})
     } catch (error) {
       res.status(400).json(error)
@@ -97,5 +120,6 @@ module.exports = {
     register,
     getAllUsers,
     deleteUser,
-    getMe
+    getMe,
+    changeActive
 }
