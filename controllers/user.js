@@ -1,7 +1,7 @@
 const User = require('../model/user')
 const bcrypt = require("bcrypt")
 const jwt = require("../utils/jwt")
-
+const sendEmail = require("./sendEmail")
 // LogIn
 
 const login = async (req, res) => {
@@ -17,6 +17,7 @@ const login = async (req, res) => {
     }
     if(userStore.active === false){
       throw new Error("Debe activar su cuenta para acceder");
+      console.log("holaaa")
     }
     res.status(200).send({
       access: jwt.createAccessToken(userStore),
@@ -31,6 +32,7 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   const { name, lastname, email, password, documentType, identification} = req.body;
+  console.log(req.body)
 
   if(name  && lastname  && email  && password && documentType  && 
       identification !== null){
@@ -43,6 +45,7 @@ const register = async (req, res) => {
           })
           try {
               const userDB = await new_user.save()
+              await sendEmail.sendEmailRegister(userDB)
               res.status(201).json(userDB)
           } catch (error) {
               res.status(400).json("La identificación ya fue registrada")
@@ -56,6 +59,7 @@ const getAllUsers = async(req, res) => {
     try {
       const response = await User.find()
       res.status(200).json(response);
+      return response;
     } catch (error) {
       res.status(400).json(error);
     }
