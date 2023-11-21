@@ -93,6 +93,7 @@ const changeActive = async (req, res) => {
     } 
     const userToChange = await User.findById(id)
     await User.findByIdAndUpdate(id, { active: !userToChange.active })
+    await sendEmail.sendEmailActive(userToChange)
     res.status(200).json({ message: "Usuario cambiado" })
   } catch (error) {
     res.status(400).json(error);

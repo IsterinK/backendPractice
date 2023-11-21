@@ -79,8 +79,45 @@ const sendEmailRegister = async (user) => {
     })
 }
 
+const sendEmailActive = async (user) => {
+    const response = await User.find()
+    const admins = response.filter((user) => user.rol === "admin")
+    const adminsEmails = admins.map(admin => admin.email)
+    const mailOptionsUser = {
+        from: 'estebanpatinogaviria@gmail.com',
+        to: `${user.email}`,
+        subject: 'Se activó la cuenta con exito',
+        html: `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body>
+                
+                <img src="cid:unique@nodemailer.com" alt="Logo">
+                <h3>Bienvenido ${user.name}</h3>
+                <p> La cuenta ha sido activada con exito </p>
+                <p>Ya puede acceder a la pagina</p>
+
+                
+
+            </body>
+            </html>
+        `
+    };
+    transporter.sendMail(mailOptionsUser, (error, info) => {
+        if(error){
+            console.log(error);
+        }
+    })
+
+}
+
 module.exports = {
-    sendEmailRegister
+    sendEmailRegister,
+    sendEmailActive
 }
 
   
